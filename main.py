@@ -1,5 +1,8 @@
 import pygame
 import numpy as np
+from parameters import (
+    bodies
+)
 
 
 class Window:
@@ -21,15 +24,16 @@ class Window:
                 if event.key == pygame.K_ESCAPE:
                     self.RUNNING = False
                     
-    def render(self):
-        pass
+    def render_bodies(self, bodies):
+        for body in bodies:
+            pygame.draw.circle(self.screen, body.color, (body.position[0], body.position[1]), body.radius)
         
     def run(self):
         while self.RUNNING:
             self.clock.tick(self.FPS)
-            self.screen.fill((55, 55, 200))
+            self.screen.fill((0, 0, 0))
             
-            self.render()
+            self.render_bodies(bodies=bodies)
             
             self.handle_events()
             pygame.display.flip()

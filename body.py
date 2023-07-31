@@ -18,11 +18,11 @@ class Body:
     def draw(self, screen):
         pygame.draw.circle(screen, self.color, (self.position[0], self.position[1]), self.radius)
     
-    def add_velocity(self):
-        pass
+    def add_velocity(self, velocity_array):
+        self.velocity = self.velocity + velocity_array
     
-    def add_force(self):
-        pass
+    def add_force(self, force_array):
+        self.force = self.force + force_array
     
     def move(self):
         pass

@@ -11,8 +11,12 @@ class Body:
         self.color = color
         self.radius = radius
         
-    def draw(self):
-        pass
+        self.velocity = np.array([0, 0, 0])
+        self.force = np.array([0, 0, 0])
+        
+        
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.color, (self.position[0], self.position[1]), self.radius)
     
     def add_velocity(self):
         pass

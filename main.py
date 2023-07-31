@@ -16,6 +16,7 @@ class Window:
         self.RUNNING = True
         
     def handle_events(self):
+        """function for handling input events"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.RUNNING = False
@@ -24,16 +25,14 @@ class Window:
                 if event.key == pygame.K_ESCAPE:
                     self.RUNNING = False
                     
-    def render_bodies(self, bodies):
-        for body in bodies:
-            pygame.draw.circle(self.screen, body.color, (body.position[0], body.position[1]), body.radius)
-        
     def run(self):
+        """Main-loop function"""
         while self.RUNNING:
             self.clock.tick(self.FPS)
             self.screen.fill((0, 0, 0))
             
-            self.render_bodies(bodies=bodies)
+            for body in bodies:
+                body.draw(self.screen)
             
             self.handle_events()
             pygame.display.flip()

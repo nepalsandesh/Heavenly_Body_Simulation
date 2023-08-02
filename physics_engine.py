@@ -17,15 +17,18 @@ class PhysicsEngine:
     def __init__(self, bodies):
         self.bodies = np.array(bodies)
         
+        print("bodies: \n ",self.bodies )
+        
         for body in self.bodies:
-            body.position = np.array([body.position[0], body.position[1]])
-            
+            body.position = np.array([body.position[0], body.position[1], body.position[2]])
+            print("body.position: \n ", body.position)
         
     def compute_force_vectors(self):
         distance_list = []
         force_list = []
         net_force = []
         
+        # computing distance vectors
         for primary_body in self.bodies:
             temp = []
             for secondary_body in self.bodies:
@@ -33,15 +36,24 @@ class PhysicsEngine:
                 temp.append(distance)
             distance_list.append(temp)
         distance_list = np.array(distance_list)
+        print("distance list : \n", distance_list)
             
         
-        
+        # computing gravitational force
         for i, primary_body in enumerate(self.bodies):
             temp = []
             for j, secondary_body in enumerate(self.bodies):
-                force = 6.67e-11 * primary_body.mass * secondary_body.mass / magnitude(distance_list[i,j])
-                force = force * unit_vector(distance_list[i,j])
-                temp.append(force)
+                # compute the distance and its magnitude between two bodies
+                distance = secondary_body.position - primary_body.position
+                dist_mag = magnitude(distance)
+
+                # Check if the distance is non-zero before calculating the force
+                if dist_mag != 0:
+                    force = 6.67e-11 * primary_body.mass * secondary_body.mass / dist_mag**2
+                    force = force * unit_vector(distance)
+                    temp.append(force)
+                else:
+                    temp.append(np.array([0.0, 0.0, 0.0]))
             force_list.append(temp)
         force_list = np.array(force_list)
     

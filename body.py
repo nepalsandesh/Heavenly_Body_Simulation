@@ -1,6 +1,7 @@
 import numpy as np
 import pygame
 
+TIME_DELAY = 0.0005
 
 class Body:
     """Heavenly body class.
@@ -25,4 +26,5 @@ class Body:
         self.force = self.force + force_array
     
     def move(self):
-        pass
+        self.velocity = self.velocity + (self.force / self.mass) * TIME_DELAY
+        self.position = self.position + self.velocity * TIME_DELAY

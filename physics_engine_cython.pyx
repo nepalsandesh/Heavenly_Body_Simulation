@@ -10,7 +10,7 @@ def unit_vector(double[:] arr):
     cdef double mag = magnitude(arr=arr)
     return arr[0] / mag, arr[1] / mag, arr[2] / mag
 
-def compute_force_vectors_cython(bodies):
+def compute_force_vectors_cython(list bodies):
     cdef int num_bodies = len(bodies)
     cdef double[:, :, :] distance_list = np.zeros((num_bodies, num_bodies, 3))
     cdef double[:, :, :] force_list = np.zeros((num_bodies, num_bodies, 3))

@@ -3,7 +3,16 @@
 /* BEGIN: Cython Metadata
 {
     "distutils": {
-        "depends": [],
+        "depends": [
+            "/home/sandesh/anaconda3/lib/python3.9/site-packages/numpy/core/include/numpy/arrayobject.h",
+            "/home/sandesh/anaconda3/lib/python3.9/site-packages/numpy/core/include/numpy/arrayscalars.h",
+            "/home/sandesh/anaconda3/lib/python3.9/site-packages/numpy/core/include/numpy/ndarrayobject.h",
+            "/home/sandesh/anaconda3/lib/python3.9/site-packages/numpy/core/include/numpy/ndarraytypes.h",
+            "/home/sandesh/anaconda3/lib/python3.9/site-packages/numpy/core/include/numpy/ufuncobject.h"
+        ],
+        "include_dirs": [
+            "/home/sandesh/anaconda3/lib/python3.9/site-packages/numpy/core/include"
+        ],
         "name": "physics_engine_cython",
         "sources": [
             "physics_engine_cython.pyx"
@@ -1735,6 +1744,12 @@ static CYTHON_INLINE int __pyx_sub_acquisition_count_locked(
 static CYTHON_INLINE void __Pyx_INC_MEMVIEW(__Pyx_memviewslice *, int, int);
 static CYTHON_INLINE void __Pyx_XDEC_MEMVIEW(__Pyx_memviewslice *, int, int);
 
+/* ArgTypeTest.proto */
+#define __Pyx_ArgTypeTest(obj, type, none_allowed, name, exact)\
+    ((likely((Py_TYPE(obj) == type) | (none_allowed && (obj == Py_None)))) ? 1 :\
+        __Pyx__ArgTypeTest(obj, type, name, exact))
+static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact);
+
 /* GetItemInt.proto */
 #define __Pyx_GetItemInt(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
     (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
@@ -1810,12 +1825,6 @@ static void __Pyx_RaiseDoubleKeywordsError(const char* func_name, PyObject* kw_n
 static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[],\
     PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args,\
     const char* function_name);
-
-/* ArgTypeTest.proto */
-#define __Pyx_ArgTypeTest(obj, type, none_allowed, name, exact)\
-    ((likely((Py_TYPE(obj) == type) | (none_allowed && (obj == Py_None)))) ? 1 :\
-        __Pyx__ArgTypeTest(obj, type, name, exact))
-static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact);
 
 /* IncludeStringH.proto */
 #include <string.h>
@@ -2848,7 +2857,7 @@ static PyObject *__pyx_pf_21physics_engine_cython_unit_vector(CYTHON_UNUSED PyOb
  *     cdef double mag = magnitude(arr=arr)
  *     return arr[0] / mag, arr[1] / mag, arr[2] / mag             # <<<<<<<<<<<<<<
  * 
- * def compute_force_vectors_cython(bodies):
+ * def compute_force_vectors_cython(list bodies):
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = 0;
@@ -2943,7 +2952,7 @@ static PyObject *__pyx_pf_21physics_engine_cython_unit_vector(CYTHON_UNUSED PyOb
 /* "physics_engine_cython.pyx":13
  *     return arr[0] / mag, arr[1] / mag, arr[2] / mag
  * 
- * def compute_force_vectors_cython(bodies):             # <<<<<<<<<<<<<<
+ * def compute_force_vectors_cython(list bodies):             # <<<<<<<<<<<<<<
  *     cdef int num_bodies = len(bodies)
  *     cdef double[:, :, :] distance_list = np.zeros((num_bodies, num_bodies, 3))
  */
@@ -2952,12 +2961,20 @@ static PyObject *__pyx_pf_21physics_engine_cython_unit_vector(CYTHON_UNUSED PyOb
 static PyObject *__pyx_pw_21physics_engine_cython_3compute_force_vectors_cython(PyObject *__pyx_self, PyObject *__pyx_v_bodies); /*proto*/
 static PyMethodDef __pyx_mdef_21physics_engine_cython_3compute_force_vectors_cython = {"compute_force_vectors_cython", (PyCFunction)__pyx_pw_21physics_engine_cython_3compute_force_vectors_cython, METH_O, 0};
 static PyObject *__pyx_pw_21physics_engine_cython_3compute_force_vectors_cython(PyObject *__pyx_self, PyObject *__pyx_v_bodies) {
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("compute_force_vectors_cython (wrapper)", 0);
-  __pyx_r = __pyx_pf_21physics_engine_cython_2compute_force_vectors_cython(__pyx_self, ((PyObject *)__pyx_v_bodies));
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bodies), (&PyList_Type), 1, "bodies", 1))) __PYX_ERR(0, 13, __pyx_L1_error)
+  __pyx_r = __pyx_pf_21physics_engine_cython_2compute_force_vectors_cython(__pyx_self, ((PyObject*)__pyx_v_bodies));
 
   /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
@@ -3004,16 +3021,20 @@ static PyObject *__pyx_pf_21physics_engine_cython_2compute_force_vectors_cython(
 
   /* "physics_engine_cython.pyx":14
  * 
- * def compute_force_vectors_cython(bodies):
+ * def compute_force_vectors_cython(list bodies):
  *     cdef int num_bodies = len(bodies)             # <<<<<<<<<<<<<<
  *     cdef double[:, :, :] distance_list = np.zeros((num_bodies, num_bodies, 3))
  *     cdef double[:, :, :] force_list = np.zeros((num_bodies, num_bodies, 3))
  */
-  __pyx_t_1 = PyObject_Length(__pyx_v_bodies); if (unlikely(__pyx_t_1 == ((Py_ssize_t)-1))) __PYX_ERR(0, 14, __pyx_L1_error)
+  if (unlikely(__pyx_v_bodies == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
+    __PYX_ERR(0, 14, __pyx_L1_error)
+  }
+  __pyx_t_1 = PyList_GET_SIZE(__pyx_v_bodies); if (unlikely(__pyx_t_1 == ((Py_ssize_t)-1))) __PYX_ERR(0, 14, __pyx_L1_error)
   __pyx_v_num_bodies = __pyx_t_1;
 
   /* "physics_engine_cython.pyx":15
- * def compute_force_vectors_cython(bodies):
+ * def compute_force_vectors_cython(list bodies):
  *     cdef int num_bodies = len(bodies)
  *     cdef double[:, :, :] distance_list = np.zeros((num_bodies, num_bodies, 3))             # <<<<<<<<<<<<<<
  *     cdef double[:, :, :] force_list = np.zeros((num_bodies, num_bodies, 3))
@@ -3185,12 +3206,20 @@ static PyObject *__pyx_pf_21physics_engine_cython_2compute_force_vectors_cython(
  *             distance_list[i, j, 0] = distance[0]
  *             distance_list[i, j, 1] = distance[1]
  */
-      __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_bodies, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 23, __pyx_L1_error)
+      if (unlikely(__pyx_v_bodies == Py_None)) {
+        PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+        __PYX_ERR(0, 23, __pyx_L1_error)
+      }
+      __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_bodies, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 23, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_position); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 23, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_bodies, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 23, __pyx_L1_error)
+      if (unlikely(__pyx_v_bodies == Py_None)) {
+        PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+        __PYX_ERR(0, 23, __pyx_L1_error)
+      }
+      __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_bodies, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 23, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_position); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 23, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
@@ -3481,7 +3510,11 @@ __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_t_15, 1, (PyObject *(*)(char *)) __
  *                 force_list[i, j, 0] = force * unit_vec[0]
  *                 force_list[i, j, 1] = force * unit_vec[1]
  */
-        __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_bodies, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
+        if (unlikely(__pyx_v_bodies == Py_None)) {
+          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+          __PYX_ERR(0, 35, __pyx_L1_error)
+        }
+        __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_bodies, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_mass); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 35, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
@@ -3489,7 +3522,11 @@ __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_t_15, 1, (PyObject *(*)(char *)) __
         __pyx_t_2 = PyNumber_Multiply(__pyx_float_6_67eneg_11, __pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_bodies, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 35, __pyx_L1_error)
+        if (unlikely(__pyx_v_bodies == Py_None)) {
+          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+          __PYX_ERR(0, 35, __pyx_L1_error)
+        }
+        __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_bodies, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 35, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_mass); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 35, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
@@ -3943,7 +3980,7 @@ __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_t_15, 1, (PyObject *(*)(char *)) __
   /* "physics_engine_cython.pyx":13
  *     return arr[0] / mag, arr[1] / mag, arr[2] / mag
  * 
- * def compute_force_vectors_cython(bodies):             # <<<<<<<<<<<<<<
+ * def compute_force_vectors_cython(list bodies):             # <<<<<<<<<<<<<<
  *     cdef int num_bodies = len(bodies)
  *     cdef double[:, :, :] distance_list = np.zeros((num_bodies, num_bodies, 3))
  */
@@ -19169,7 +19206,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "physics_engine_cython.pyx":13
  *     return arr[0] / mag, arr[1] / mag, arr[2] / mag
  * 
- * def compute_force_vectors_cython(bodies):             # <<<<<<<<<<<<<<
+ * def compute_force_vectors_cython(list bodies):             # <<<<<<<<<<<<<<
  *     cdef int num_bodies = len(bodies)
  *     cdef double[:, :, :] distance_list = np.zeros((num_bodies, num_bodies, 3))
  */
@@ -19670,7 +19707,7 @@ if (!__Pyx_RefNanny) {
   /* "physics_engine_cython.pyx":13
  *     return arr[0] / mag, arr[1] / mag, arr[2] / mag
  * 
- * def compute_force_vectors_cython(bodies):             # <<<<<<<<<<<<<<
+ * def compute_force_vectors_cython(list bodies):             # <<<<<<<<<<<<<<
  *     cdef int num_bodies = len(bodies)
  *     cdef double[:, :, :] distance_list = np.zeros((num_bodies, num_bodies, 3))
  */
@@ -20428,6 +20465,27 @@ static CYTHON_INLINE void __Pyx_XDEC_MEMVIEW(__Pyx_memviewslice *memslice,
     }
 }
 
+/* ArgTypeTest */
+static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact)
+{
+    if (unlikely(!type)) {
+        PyErr_SetString(PyExc_SystemError, "Missing type object");
+        return 0;
+    }
+    else if (exact) {
+        #if PY_MAJOR_VERSION == 2
+        if ((type == &PyBaseString_Type) && likely(__Pyx_PyBaseString_CheckExact(obj))) return 1;
+        #endif
+    }
+    else {
+        if (likely(__Pyx_TypeCheck(obj, type))) return 1;
+    }
+    PyErr_Format(PyExc_TypeError,
+        "Argument '%.200s' has incorrect type (expected %.200s, got %.200s)",
+        name, type->tp_name, Py_TYPE(obj)->tp_name);
+    return 0;
+}
+
 /* GetItemInt */
 static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j) {
     PyObject *r;
@@ -20991,27 +21049,6 @@ invalid_keyword:
     #endif
 bad:
     return -1;
-}
-
-/* ArgTypeTest */
-static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact)
-{
-    if (unlikely(!type)) {
-        PyErr_SetString(PyExc_SystemError, "Missing type object");
-        return 0;
-    }
-    else if (exact) {
-        #if PY_MAJOR_VERSION == 2
-        if ((type == &PyBaseString_Type) && likely(__Pyx_PyBaseString_CheckExact(obj))) return 1;
-        #endif
-    }
-    else {
-        if (likely(__Pyx_TypeCheck(obj, type))) return 1;
-    }
-    PyErr_Format(PyExc_TypeError,
-        "Argument '%.200s' has incorrect type (expected %.200s, got %.200s)",
-        name, type->tp_name, Py_TYPE(obj)->tp_name);
-    return 0;
 }
 
 /* BytesEquals */

@@ -5,6 +5,8 @@ from parameters import (
     bodies
 )
 
+from physics_engine_cython import compute_force_vectors_cython  # Import the Cython version
+
 
 engine = PhysicsEngine(bodies)
 
@@ -35,6 +37,7 @@ class Window:
             self.screen.fill((0, 0, 0))
             
             net_force = engine.compute_force_vectors()
+            # net_force = compute_force_vectors_cython(bodies)
             for i, body in enumerate(bodies):
                 body.force = net_force[i]
             

@@ -25,3 +25,21 @@ body3.add_velocity(np.array([50, 0, 0]))
 
 
 bodies = [body1, body2, body3, body4]
+
+
+
+
+# # ------------ Generation of multiple bodies ---------------
+# bodies = [
+#     Body(
+#         position=np.random.randint(0, 1080, 3),
+#         mass=  6e15,
+#         color=np.random.randint(0,255,3),
+#         radius = 20 + i
+#     ) for i in range(1,10)
+# ]
+
+
+for i in bodies:
+    i.add_velocity(np.random.randint(-100, 100, 3))
+    # i.mass = np.random.randint(1, 100, 1) * 6e15

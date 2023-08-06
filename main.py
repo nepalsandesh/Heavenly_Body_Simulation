@@ -8,7 +8,6 @@ from parameters import (
 from physics_engine_cython import compute_force_vectors_cython  # Import the Cython version
 
 
-engine = PhysicsEngine(bodies)
 
 class Window:
     """Window rendering class"""
@@ -44,8 +43,14 @@ class Window:
             for body in bodies:
                 body.draw(self.screen)
                 
+                if (body.position[0] >= 0 and body.position[0] <= 1920) and (body.position[1] >= 0 and body.position[1] <= 1080):
+                    body.draw_lines(self.screen, body.color)
+                
             for body in bodies:
                 body.move()
+                
+            # keep heaviest body stable
+            bodies[-1].velocity = [0,0,0]
             
             self.handle_events()
             pygame.display.flip()
@@ -54,4 +59,5 @@ class Window:
             
 if __name__ == "__main__":
     app = Window()
+    engine = PhysicsEngine(bodies)
     app.run()

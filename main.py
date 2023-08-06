@@ -40,17 +40,17 @@ class Window:
             for i, body in enumerate(bodies):
                 body.force = net_force[i]
             
-            for body in bodies:
-                body.draw(self.screen)
-                
+            for body in bodies:               
                 if (body.position[0] >= 0 and body.position[0] <= 1920) and (body.position[1] >= 0 and body.position[1] <= 1080):
-                    body.draw_lines(self.screen, body.color)
+                    body.draw_lines(self.screen, (body.color[0]/1.5, body.color[1]/1.5, body.color[2]/1.5 ))
+                    pass
+                body.draw(self.screen)  
                 
             for body in bodies:
                 body.move()
                 
             # keep heaviest body stable
-            bodies[-1].velocity = [0,0,0]
+            bodies[-1].velocity = [0,0,0] 
             
             self.handle_events()
             pygame.display.flip()

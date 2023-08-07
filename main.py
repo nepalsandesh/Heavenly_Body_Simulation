@@ -66,15 +66,12 @@ class Window:
             
             for body in bodies:               
                 if (body.position[0] >= 0 and body.position[0] <= 1920) and (body.position[1] >= 0 and body.position[1] <= 1080):
-                    body.draw_lines(self.screen, (body.color[0]/1.5, body.color[1]/1.5, body.color[2]/1.5 ))
+                    body.draw_lines(self.screen, (body.color[0]/1.2, body.color[1]/1.2, body.color[2]/1.2))
                     pass
-                body.draw(self.screen)  
-                body.move()
-                
                 
             for body in bodies:
-                # body.move()
-                pass
+                body.draw(self.screen)  
+                body.move()
                 
             # keep heaviest body stable
             bodies[-1].velocity = [0,0,0] 
@@ -82,7 +79,7 @@ class Window:
             
             # image save
             if self.save_image:
-                filename = "captures/observe_3/%08d.png" % (self.frame_count)
+                filename = "captures/observe/%08d.png" % (self.frame_count)
                 pygame.image.save(self.screen, filename)
                 self.frame_count += 1
             

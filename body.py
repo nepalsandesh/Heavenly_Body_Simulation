@@ -1,7 +1,7 @@
 import numpy as np
 import pygame
 
-TIME_DELAY=0.04
+TIME_DELAY=0.003
 
 class Body:
     """Heavenly body class.
@@ -27,7 +27,7 @@ class Body:
             
     def draw_lines(self, screen, color):
         if len(self.position_history) >= 2:
-            pygame.draw.lines(screen, color, False, self.position_history, 1)
+            pygame.draw.lines(screen, color, False, self.position_history, 2)
     
     def add_velocity(self, velocity_array):
         self.velocity = self.velocity + velocity_array

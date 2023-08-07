@@ -17,11 +17,11 @@ class PhysicsEngine:
     def __init__(self, bodies):
         self.bodies = np.array(bodies)
         
-        print("bodies: \n ",self.bodies )
+        # print("bodies: \n ",self.bodies )
         
         for body in self.bodies:
             body.position = np.array([body.position[0], body.position[1], body.position[2]])
-            print("body.position: \n ", body.position)
+            # print("body.position: \n ", body.position)
         
     def compute_force_vectors(self):
         distance_list = []
@@ -36,7 +36,7 @@ class PhysicsEngine:
                 temp.append(distance)
             distance_list.append(temp)
         distance_list = np.array(distance_list)
-        print("distance list : \n", distance_list)
+        # print("distance list : \n", distance_list)
             
         
         # computing gravitational force

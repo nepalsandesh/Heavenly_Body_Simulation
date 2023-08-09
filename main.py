@@ -28,6 +28,11 @@ class Window:
         self.frame_count = 0
         self.save_image = save_image
         
+        self.show_axis = True
+        
+        self.logo = pygame.image.load("VORTEX_LAB_logo.png")
+        self.logo = pygame.transform.rotozoom(self.logo, 0, 0.53)
+        
     def handle_events(self):
         """function for handling input events"""
         for event in pygame.event.get():
@@ -37,6 +42,9 @@ class Window:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.RUNNING = False
+                    
+                if event.key == pygame.K_SPACE:
+                    self.show_axis = not self.show_axis
                     
             
         keys = pygame.key.get_pressed()    
@@ -64,10 +72,11 @@ class Window:
             for i, body in enumerate(bodies):
                 body.force = net_force[i]
             
-            for body in bodies:               
-                if (body.position[0] >= 0 and body.position[0] <= 1920) and (body.position[1] >= 0 and body.position[1] <= 1080):
-                    body.draw_lines(self.screen, (body.color[0]/1.2, body.color[1]/1.2, body.color[2]/1.2))
-                    pass
+            if self.show_axis:
+                for body in bodies:               
+                    if (body.position[0] >= -500 and body.position[0] <= 1920+500) and (body.position[1] >= -500 and body.position[1] <= 1080+500):
+                        body.draw_lines(self.screen, (body.color[0]/1.6, body.color[1]/1.6, body.color[2]/1.6))
+                        pass
                 
             for body in bodies:
                 body.draw(self.screen)  
@@ -76,6 +85,10 @@ class Window:
             # keep heaviest body stable
             bodies[-1].velocity = [0,0,0] 
             # print("Position history of a first body : \n", bodies[i].position_history)
+            
+            # render logo
+            self.screen.blit(self.logo, (1680, 980))
+            
             
             # image save
             if self.save_image:

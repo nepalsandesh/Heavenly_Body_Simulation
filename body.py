@@ -1,7 +1,7 @@
 import numpy as np
 import pygame
 
-TIME_DELAY=0.001
+TIME_DELAY=0.0006
 
 class Body:
     """Heavenly body class.

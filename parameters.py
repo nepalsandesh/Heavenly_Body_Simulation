@@ -14,7 +14,7 @@ body2 = Body(position=(960+400, 540+400, 0), mass=6e15,
 body2.add_velocity(np.array([-80, 0, 0]))
 
 body3 = Body(position=(1920/2, 1080/2, 0), mass= 80 * 6e15,
-             color=(100, 100, 220),
+             color=(52, 210, 235),
              radius=40)
 body3.add_velocity(np.array([0, 0, 0]))
 
@@ -54,22 +54,25 @@ bodies = [body1, body2, body3, body4, body5]
 # ------------ Generation of multiple bodies ---------------
 bodies = [
     Body(
-        position=[np.random.randint(0,1920), np.random.randint(0,1080), 0],
-        mass=  np.random.randint(1, 30) * 6e15,
+        position=[np.random.randint(460,1460), np.random.randint(140,1040), 0],
+        mass=  np.random.randint(5, 30) * 6e15,
         # mass=  5 * 6e15,
         color=np.random.randint(0,255,3),
         radius = 20
-    ) for i in range(20)
+    ) for i in range(100)
 ]
 bodies.append(body3)
 
 
 
+
 for i in bodies:
-    i.add_velocity([np.random.randint(-2000, 2000), np.random.randint(-2000, 2000), 0])
+    i.add_velocity([np.random.randint(-50000, 50000), np.random.randint(-50000, 50000), 0])
     i.save_positions = True
     i.radius = (i.mass / 6e15) * (1/2)
+    
 
     
 bodies[-1].radius = 40
-bodies[-1].mass = 6e15 * 10000
+bodies[-1].mass = 6e15 * 100000
+# bodies = np.array(bodies, dtype=object)

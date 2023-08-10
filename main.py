@@ -4,7 +4,7 @@ from physics_engine import PhysicsEngine
 from parameters import (
     bodies
 )
-from rotation import rotate_x, rotate_y, rotate_z
+from rotation import rotate_x, rotate_y, rotate_z, get_rotated_orbit
 
 from physics_engine_cython import compute_force_vectors_cython  # Import the Cython version
 
@@ -51,12 +51,16 @@ class Window:
         if keys[pygame.K_x]:
             for body in bodies:
                 body.position = rotate_x(body.position, 0.02)
-        if keys[pygame.K_y]:
-            for body in bodies:
-                body.position = rotate_y(body.position, 0.02)
+                body.position_history = get_rotated_orbit(body.position_history, "x", 0.02)
+        # if keys[pygame.K_y]:
+        #     for body in bodies:
+        #         body.position_history = get_rotated_orbit(body.position_history, "y", 0.02)
+
+        for body in bodies:
+            body.position_history = get_rotated_orbit(body.position_history, "y", 0.02)
         if keys[pygame.K_z]:
             for body in bodies:
-                body.position = rotate_z(body.position, 0.02)
+                body.position_history = get_rotated_orbit(body.position_history, "z", 0.02)
 
                 
                     

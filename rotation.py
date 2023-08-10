@@ -1,8 +1,14 @@
 import numpy as np
 
 
+# projection_matrix = np.array([
+#     [1, 0, 0]
+# ])
+
+
 
 def rotate_x(positions, theta):
+    print(positions.shape)
     positions = positions.reshape((-1,1))
     # print("position.shape \,", positions.shape)
     rotation_x = np.array([
@@ -37,3 +43,29 @@ def rotate_z(positions, theta):
     ])
     rotated_position = np.dot(rotation_z, positions)
     return rotated_position.reshape(3)
+
+
+def get_rotated_orbit(coordinates, direction, angle):
+    temp = []
+    if direction == "x":
+        for point in coordinates:
+            rotated_point = rotate_x(np.array(point), angle)
+            temp.append(rotated_point)
+        return temp
+    if direction == "y":
+        for point in coordinates:
+            rotated_point = rotate_x(np.array(point), angle)
+            temp.append(rotated_point)
+        return temp
+    if direction == "z":
+        for point in coordinates:
+            rotated_point = rotate_x(np.array(point), angle)
+            temp.append(rotated_point)
+        return temp
+    else:
+        return coordinates
+    
+        
+        
+            
+        

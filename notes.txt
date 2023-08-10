@@ -1,2 +1,2 @@
 # video saving command (linux)
-ffmpeg -framerate 60 -i captures/observe_3%08d.jpg saved_video/output3.mp4
+ffmpeg -framerate 60 -i captures/observe_3%08d.jpg saved_video/output4.mp4

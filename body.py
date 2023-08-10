@@ -11,6 +11,13 @@ def get_window_coordinate(array):
     # print("window coordinate : ", window_coordinate)
     return window_coordinate
 
+def get_draw_lines_coordinates(position_array):
+    position_array = np.array(position_array)
+    print("position array :", position_array)
+    position_array[:, 0] += 1920//2
+    position_array[:, 1] += 1080//2
+    return list(position_array) 
+
 
 
 
@@ -38,11 +45,13 @@ class Body:
             pygame.draw.circle(screen, self.color, (position[0], position[1]), self.radius)
         
         if self.save_positions == True:
-            self.position_history.append((position[0], position[1]))
+            self.position_history.append((self.position[0], self.position[1]))
             
     def draw_lines(self, screen, color):
+        position_array = self.position_history
         if len(self.position_history) >= 2:
-            pygame.draw.lines(screen, color, False, self.position_history, 2)
+            position_array = get_draw_lines_coordinates(position_array)
+            pygame.draw.lines(screen, color, False, position_array, 2)
     
     def add_velocity(self, velocity_array):
         self.velocity = self.velocity + velocity_array

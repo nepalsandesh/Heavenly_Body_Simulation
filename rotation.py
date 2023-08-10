@@ -4,7 +4,7 @@ import numpy as np
 
 def rotate_x(positions, theta):
     positions = positions.reshape((-1,1))
-    print("position.shape \,", positions.shape)
+    # print("position.shape \,", positions.shape)
     rotation_x = np.array([
         [1, 0, 0],
         [0, np.cos(theta), -np.sin(theta)],
@@ -17,7 +17,7 @@ def rotate_x(positions, theta):
 
 def rotate_y(positions, theta):
     positions = positions.reshape((-1,1))
-    print("position.shape \,", positions.shape)
+    # print("position.shape \,", positions.shape)
     rotation_y = np.array([
         [np.cos(theta), 0, -np.sin(theta)],
         [0, 1, 0],
@@ -29,7 +29,7 @@ def rotate_y(positions, theta):
 
 def rotate_z(positions, theta):
     positions = positions.reshape((-1,1))
-    print("position.shape \,", positions.shape)
+    # print("position.shape \,", positions.shape)
     rotation_z = np.array([
         [np.cos(theta), -np.sin(theta), 0],
         [np.sin(theta), np.cos(theta), 0],

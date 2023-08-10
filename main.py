@@ -48,13 +48,13 @@ class Window:
                     
             
         keys = pygame.key.get_pressed()    
-        if (keys[pygame.K_x] & keys[pygame.K_PLUS]):
+        if keys[pygame.K_x]:
             for body in bodies:
                 body.position = rotate_x(body.position, 0.02)
-        if keys[pygame.K_y] & keys[pygame.K_PLUS]:
+        if keys[pygame.K_y]:
             for body in bodies:
                 body.position = rotate_y(body.position, 0.02)
-        if keys[pygame.K_z] & keys[pygame.K_PLUS]:
+        if keys[pygame.K_z]:
             for body in bodies:
                 body.position = rotate_z(body.position, 0.02)
 
@@ -66,7 +66,7 @@ class Window:
             self.clock.tick(self.FPS)
             self.screen.fill((0, 0, 0))
             
-            net_force = engine.compute_force_vectors()
+            net_force = engine.compute_force_vectors(bodies=bodies)
             # print("Net Force :\n", net_force)
             # net_force = compute_force_vectors_cython(bodies)
             for i, body in enumerate(bodies):
@@ -104,5 +104,5 @@ class Window:
             
 if __name__ == "__main__":
     app = Window(save_image=True)
-    engine = PhysicsEngine(bodies)
+    engine = PhysicsEngine()
     app.run()

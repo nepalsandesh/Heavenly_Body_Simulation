@@ -94,7 +94,7 @@ class RenderEngine:
             pygame.draw.lines(self.screen, body.color, False, rotated_orbit_points, 1)
 
             
-        self.angle += 0.001
+        self.angle += 0.005
         if angle >= 2* np.pi:
             angle = 0
     
@@ -104,21 +104,23 @@ class RenderEngine:
             body.force = net_force[i]
             body.move()
             
+            body.append_position(body.position)
+            
+            
         
         
     
     def draw(self):
-        for i, body in enumerate(bodies):
-            window_coordinate = get_window_coordinates(body.position)
-            
-            pygame.draw.circle(
-                self.screen,
-                body.color,
-                window_coordinate[:2],
-                body.radius
-            )
-            
-            body.append_position(body.position)
+        if not self.rotate_y:
+            for i, body in enumerate(bodies):
+                window_coordinate = get_window_coordinates(body.position)
+                
+                pygame.draw.circle(
+                    self.screen,
+                    body.color,
+                    window_coordinate[:2],
+                    body.radius
+                )
         
         if self.rotate_y:
             self.rotate(self.angle)

@@ -57,7 +57,11 @@ class Window:
         #         body.position_history = get_rotated_orbit(body.position_history, "y", 0.02)
 
         for body in bodies:
-            body.position_history = get_rotated_orbit(body.position_history, "y", 0.02)
+            body.position_history = np.dot(np.array(body.position_history), np.array([[np.cos(0.005), 0 , -np.sin(0.005)], [0, 1, 0], [np.sin(0.005), 0, np.cos(0.005)]]).T)
+            body.position_history = list(body.position_history)
+            # body.position_history = get_rotated_orbit(body.position_history, "x", 0.005)
+            # body.position_history = get_rotated_orbit(body.position_history, "x", 0.005)
+            
         if keys[pygame.K_z]:
             for body in bodies:
                 body.position_history = get_rotated_orbit(body.position_history, "z", 0.02)

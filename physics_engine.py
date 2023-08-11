@@ -55,7 +55,6 @@ class PhysicsEngine:
             force_list.append(temp)
         force_list = np.array(force_list)
     
-
         for obj in force_list:
             net_force.append(obj.sum(axis=0))
             

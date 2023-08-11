@@ -54,12 +54,12 @@ bodies = [body1, body2, body3, body4, body5]
 # ------------ Generation of multiple bodies ---------------
 bodies = [
     Body(
-        position=[np.random.randint(-500, 500), np.random.randint(-500, 500), 0],
+        position=[np.random.randint(-500, 500), np.random.randint(-500, 500), np.random.randint(-500, 500)],
         mass=  np.random.randint(5, 30) * 6e15,
         # mass=  5 * 6e15,
         color=np.random.randint(0,255,3),
         radius = 20
-    ) for i in range(100)
+    ) for i in range(8)
 ]
 bodies.append(body3)
 

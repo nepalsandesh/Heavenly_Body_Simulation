@@ -1,7 +1,7 @@
 import numpy as np
 import pygame
 from physics_engine import PhysicsEngine
-from rotation_3d_test import get_projected_points
+from rotation_3d import get_projected_points
 
 
 def rotate_y(theta):
@@ -55,7 +55,7 @@ class Body:
 
 
 class RenderEngine:
-    def __init__(self):
+    def __init__(self, save_image=False):
         pygame.init()
         self.width, self.height = 1920, 1080
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -68,6 +68,9 @@ class RenderEngine:
         self.scale = 500
         
         self.rotate_y = False
+        
+        self.save_image = save_image
+        self.frame_count = 0
         
     def check_events(self):
         [exit() for event in pygame.event.get() if event.type==pygame.QUIT]
@@ -166,6 +169,12 @@ class RenderEngine:
             text = self.font.render("FPS: %f"%(self.clock.get_fps()), True, (255, 255, 255))
             self.screen.blit(text, (1920//2, 20))
             
+            # image save
+            if self.save_image:
+                filename = "captures/observe/%08d.png" % (self.frame_count)
+                pygame.image.save(self.screen, filename)
+                self.frame_count += 1
+            
             pygame.display.flip()
     
 
@@ -196,5 +205,5 @@ for body in bodies:
 if __name__ == "__main__":
     bodies = np.array(bodies, dtype=object)
     engine = PhysicsEngine()
-    app = RenderEngine()
+    app = RenderEngine(save_image=True)
     app.run()

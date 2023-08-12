@@ -1,7 +1,7 @@
 import numpy as np
 import pygame
 
-TIME_DELAY=0.0006
+TIME_DELAY=0.002
 
 
 def get_window_coordinate(array):

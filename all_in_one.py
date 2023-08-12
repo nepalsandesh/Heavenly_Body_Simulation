@@ -1,6 +1,7 @@
 import numpy as np
 import pygame
 from physics_engine import PhysicsEngine
+from rotation_3d_test import get_projected_points
 
 
 def rotate_y(theta):
@@ -60,8 +61,11 @@ class RenderEngine:
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.clock = pygame.time.Clock()
         self.FPS = 60
-        self.angle = 0
+        self.angle = 0.01
         self.font = pygame.font.Font('freesansbold.ttf', 15)
+        
+        self.distance = 500
+        self.scale = 500
         
         self.rotate_y = False
         
@@ -75,23 +79,48 @@ class RenderEngine:
             
         if keys[pygame.K_y]:
             self.rotate_y = not self.rotate_y
+            
+        if keys[pygame.K_d]:
+            self.distance += 10
+        if keys[pygame.K_c]:
+            self.distance -= 10
+        if keys[pygame.K_s]:
+            self.scale += 10
+        if keys[pygame.K_x]:
+            self.scale -= 10
         
+    # def rotate(self, angle):
+    #     bodies_position = np.array([body.position for body in bodies])
+    #     rotated_points = np.dot(rotate_y(angle), bodies_position.T)
+    #     rotated_points = rotated_points.T
+        
+    #     for i, body in enumerate(bodies):
+    #         window_coordinate = get_window_coordinates(rotated_points[i])
+    #         if (window_coordinate[0] >= 0 and window_coordinate[0] <= 1920) and (window_coordinate[1] >= 0 and window_coordinate[1] <= 1080):
+    #             pygame.draw.circle(self.screen, body.color, window_coordinate[:2], body.radius)
+            
+    #         orbit_points = body.position_history
+    #         rotated_orbit_points = np.dot(rotate_y(angle), orbit_points.T)
+    #         rotated_orbit_points = rotated_orbit_points.T
+    #         rotated_orbit_points = get_window_coordinates(rotated_orbit_points)[:, :2]
+            
+    #         pygame.draw.lines(self.screen, body.color, False, rotated_orbit_points, 1)
+    
+    
     def rotate(self, angle):
         bodies_position = np.array([body.position for body in bodies])
-        rotated_points = np.dot(rotate_y(angle), bodies_position.T)
-        rotated_points = rotated_points.T
+        print("bodies_position :  \n", bodies_position)
+        projected_points = get_projected_points(bodies_position, self.angle, self.distance, self.scale)
         
         for i, body in enumerate(bodies):
-            window_coordinate = get_window_coordinates(rotated_points[i])
-            if (window_coordinate[0] >= 0 and window_coordinate[0] <= 1920) and (window_coordinate[1] >= 0 and window_coordinate[1] <= 1080):
-                pygame.draw.circle(self.screen, body.color, window_coordinate[:2], body.radius)
+            point = projected_points[i]
+            # print(point)
+            if (point[0] >= 0 and point[0] <= 1920) and (point[1] >= 0 and point[1] <= 1080):
+                pygame.draw.circle(self.screen, body.color, point, body.radius)
             
-            orbit_points = body.position_history
-            rotated_orbit_points = np.dot(rotate_y(angle), orbit_points.T)
-            rotated_orbit_points = rotated_orbit_points.T
-            rotated_orbit_points = get_window_coordinates(rotated_orbit_points)[:, :2]
-            
-            pygame.draw.lines(self.screen, body.color, False, rotated_orbit_points, 1)
+                orbit_points = body.position_history
+                projected_orbit_points = get_projected_points(orbit_points, self.angle, self.distance,  self.scale)
+                pygame.draw.lines(self.screen, body.color, False, projected_orbit_points, 1)
 
             
         self.angle += 0.005

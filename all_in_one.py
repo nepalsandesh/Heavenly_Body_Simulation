@@ -55,7 +55,7 @@ class Body:
 
 
 class RenderEngine:
-    def __init__(self, save_image=False):
+    def __init__(self, save_image=False, display_logo=False):
         pygame.init()
         self.width, self.height = 1920, 1080
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -71,6 +71,10 @@ class RenderEngine:
         
         self.save_image = save_image
         self.frame_count = 0
+        
+        self.display_logo = display_logo
+        self.logo = pygame.image.load("VORTEX_LAB_logo.png")
+        self.logo = pygame.transform.rotozoom(self.logo, 0, 0.53)
         
     def check_events(self):
         [exit() for event in pygame.event.get() if event.type==pygame.QUIT]
@@ -167,13 +171,16 @@ class RenderEngine:
             self.draw()
             bodies[-1].position = np.zeros(3)
             text = self.font.render("FPS: %f"%(self.clock.get_fps()), True, (255, 255, 255))
-            self.screen.blit(text, (1920//2, 20))
+            # self.screen.blit(text, (1920//2, 20))
+            
+            if self.display_logo:
+                self.screen.blit(self.logo, (1680, 980))
             
             # image save
             if self.save_image:
                 filename = "captures/observe/%08d.png" % (self.frame_count)
                 pygame.image.save(self.screen, filename)
-                self.frame_count += 1
+                self.frame_count += 1            
             
             pygame.display.flip()
     
@@ -205,5 +212,5 @@ for body in bodies:
 if __name__ == "__main__":
     bodies = np.array(bodies, dtype=object)
     engine = PhysicsEngine()
-    app = RenderEngine(save_image=True)
+    app = RenderEngine(save_image=True, display_logo=True)
     app.run()

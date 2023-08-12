@@ -13,7 +13,7 @@ from physics_engine_cython import compute_force_vectors_cython  # Import the Cyt
 
 class Window:
     """Window rendering class"""
-    def __init__(self, save_image=False):
+    def __init__(self, save_image=False, display_logo=False):
         self.WIDTH = 1920
         self.HEIGHT = 1080
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -30,6 +30,7 @@ class Window:
         
         self.show_axis = True
         
+        self.display_logo = display_logo
         self.logo = pygame.image.load("VORTEX_LAB_logo.png")
         self.logo = pygame.transform.rotozoom(self.logo, 0, 0.53)
         
@@ -95,7 +96,8 @@ class Window:
             # print("Position history of a first body : \n", bodies[i].position_history)
             
             # render logo
-            self.screen.blit(self.logo, (1680, 980))
+            if self.display_logo:
+                self.screen.blit(self.logo, (1680, 980))
             
             
             # image save
@@ -111,6 +113,6 @@ class Window:
             
             
 if __name__ == "__main__":
-    app = Window(save_image=True)
+    app = Window(save_image=True, display_logo=True)
     engine = PhysicsEngine()
     app.run()

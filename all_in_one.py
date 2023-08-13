@@ -29,7 +29,7 @@ def get_window_coordinates(point_array):
 
 class Body:
     """Body Class"""
-    def __init__(self, position, mass, color=np.random.randint(0, 255, 3), radius=10, TIME_DELAY=0.005):
+    def __init__(self, position, mass, color=np.random.randint(0, 255, 3), radius=10, TIME_DELAY=0.009):
         self.position = position
         self.mass = mass
         self.color = color
@@ -64,8 +64,8 @@ class RenderEngine:
         self.angle = 0.01
         self.font = pygame.font.Font('freesansbold.ttf', 15)
         
-        self.distance = 500
-        self.scale = 500
+        self.distance = 1000
+        self.scale = 1
         
         self.rotate_y = False
         
@@ -75,6 +75,8 @@ class RenderEngine:
         self.display_logo = display_logo
         self.logo = pygame.image.load("VORTEX_LAB_logo.png")
         self.logo = pygame.transform.rotozoom(self.logo, 0, 0.53)
+        
+        self.rotation_speed = 0.005
         
     def check_events(self):
         [exit() for event in pygame.event.get() if event.type==pygame.QUIT]
@@ -95,6 +97,10 @@ class RenderEngine:
             self.scale += 10
         if keys[pygame.K_x]:
             self.scale -= 10
+        if keys[pygame.K_UP]:
+            self.rotation_speed += 0.005
+        if keys[pygame.K_DOWN]:
+            self.rotation_speed -= 0.005
         
     # def rotate(self, angle):
     #     bodies_position = np.array([body.position for body in bodies])
@@ -116,7 +122,7 @@ class RenderEngine:
     
     def rotate(self, angle):
         bodies_position = np.array([body.position for body in bodies])
-        print("bodies_position :  \n", bodies_position)
+        # print("bodies_position :  \n", bodies_position)
         projected_points = get_projected_points(bodies_position, self.angle, self.distance, self.scale)
         
         for i, body in enumerate(bodies):
@@ -130,7 +136,7 @@ class RenderEngine:
                 pygame.draw.lines(self.screen, body.color, False, projected_orbit_points, 1)
 
             
-        self.angle += 0.005
+        self.angle += self.rotation_speed
         if angle >= 2* np.pi:
             angle = 0
     
@@ -180,7 +186,10 @@ class RenderEngine:
             if self.save_image:
                 filename = "captures/observe/%08d.png" % (self.frame_count)
                 pygame.image.save(self.screen, filename)
-                self.frame_count += 1            
+                self.frame_count += 1  
+                
+            print("Distance: %g, Scale: %g, FPS: %g, Rotation_speed: %g"%(self.distance, self.scale, self.clock.get_fps(), self.rotation_speed))
+        
             
             pygame.display.flip()
     

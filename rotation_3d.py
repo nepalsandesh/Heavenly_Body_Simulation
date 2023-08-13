@@ -97,5 +97,5 @@ def get_projected_points(points_3d, phi, distance=500, scale=1000):
     x = projected_points[:, 0] * scale + (1920/2)
     y = projected_points[:, 1] * scale + (1080/2)
     points = np.array([x, y]).T
-    print("points : \n", points)
+    # print("points : \n", points)
     return points

@@ -2,7 +2,7 @@ import numpy as np
 import pygame
 from physics_engine import PhysicsEngine
 from rotation_3d import get_projected_points
-
+from ui_parameters import panel
 
 def rotate_y(theta):
     return np.array([
@@ -167,6 +167,9 @@ class RenderEngine:
         if self.rotate_y:
             self.rotate(self.angle)
             
+    def render_ui(self):
+        panel.render(self.screen)
+            
     
     def run(self):
         while True:
@@ -175,6 +178,7 @@ class RenderEngine:
             self.check_events()        
             self.update()
             self.draw()
+            self.render_ui()
             bodies[-1].position = np.zeros(3)
             text = self.font.render("FPS: %f"%(self.clock.get_fps()), True, (255, 255, 255))
             # self.screen.blit(text, (1920//2, 20))

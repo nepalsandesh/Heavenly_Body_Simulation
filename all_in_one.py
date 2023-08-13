@@ -1,8 +1,9 @@
 import numpy as np
 import pygame
+pygame.init()
 from physics_engine import PhysicsEngine
 from rotation_3d import get_projected_points
-from ui_parameters import panel
+from ui_components import panel, add_body_button
 
 def rotate_y(theta):
     return np.array([
@@ -55,17 +56,19 @@ class Body:
 
 
 class RenderEngine:
-    def __init__(self, save_image=False, display_logo=False):
+    """Engine Renderer Class
+    """
+    def __init__(self, bodies, save_image=False, display_logo=False):
         pygame.init()
         self.width, self.height = 1920, 1080
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.clock = pygame.time.Clock()
         self.FPS = 60
-        self.angle = 0.01
+        self.angle = 0.00
         self.font = pygame.font.Font('freesansbold.ttf', 15)
         
-        self.distance = 1000
-        self.scale = 1
+        self.distance = 4400
+        self.scale = 2200
         
         self.rotate_y = False
         
@@ -76,9 +79,11 @@ class RenderEngine:
         self.logo = pygame.image.load("VORTEX_LAB_logo.png")
         self.logo = pygame.transform.rotozoom(self.logo, 0, 0.53)
         
-        self.rotation_speed = 0.005
+        self.rotation_speed = 0.000
+        self.bodies = bodies
         
     def check_events(self):
+        """Input Events Handling Function"""
         [exit() for event in pygame.event.get() if event.type==pygame.QUIT]
         
         keys = pygame.key.get_pressed()
@@ -121,11 +126,12 @@ class RenderEngine:
     
     
     def rotate(self, angle):
-        bodies_position = np.array([body.position for body in bodies])
+        """Rotation Function"""
+        bodies_position = np.array([body.position for body in self.bodies])
         # print("bodies_position :  \n", bodies_position)
         projected_points = get_projected_points(bodies_position, self.angle, self.distance, self.scale)
         
-        for i, body in enumerate(bodies):
+        for i, body in enumerate(self.bodies):
             point = projected_points[i]
             # print(point)
             if (point[0] >= 0 and point[0] <= 1920) and (point[1] >= 0 and point[1] <= 1080):
@@ -141,20 +147,16 @@ class RenderEngine:
             angle = 0
     
     def update(self):
-        net_force = engine.compute_force_vectors(bodies=bodies)
-        for i, body in enumerate(bodies):
+        net_force = engine.compute_force_vectors(bodies=self.bodies)
+        for i, body in enumerate(self.bodies):
             body.force = net_force[i]
             body.move()
-            
             body.append_position(body.position)
             
-            
-        
-        
-    
+
     def draw(self):
         if not self.rotate_y:
-            for i, body in enumerate(bodies):
+            for i, body in enumerate(self.bodies):
                 window_coordinate = get_window_coordinates(body.position)
                 
                 pygame.draw.circle(
@@ -167,8 +169,21 @@ class RenderEngine:
         if self.rotate_y:
             self.rotate(self.angle)
             
+            
     def render_ui(self):
         panel.render(self.screen)
+        if add_body_button.Draw(self.screen):
+            self.bodies = np.append(self.bodies, 
+                      Body(
+                          position=np.random.randint(-500, 500, 3),
+                          mass= 6e15 * 20,
+                          color= np.random.randint(0, 256, 3),
+                          radius=20
+                      ))
+            idx = self.bodies.size - 1
+            self.bodies[idx].add_velocity(np.random.randint(-500, 500, 3))
+            print(self.bodies.size)
+
             
     
     def run(self):
@@ -205,7 +220,7 @@ bodies = [Body(
     position=np.random.randint(-500, 500, 3),
     mass=np.random.randint(5, 20) * 6e15,
     color=np.random.randint(0, 256, 3)
-) for i in range(8)]
+) for i in range(1)]
 
 bodies.append(Body(
     position=np.zeros(3),
@@ -225,5 +240,5 @@ for body in bodies:
 if __name__ == "__main__":
     bodies = np.array(bodies, dtype=object)
     engine = PhysicsEngine()
-    app = RenderEngine(save_image=True, display_logo=True)
+    app = RenderEngine(bodies=bodies, save_image=False, display_logo=True)
     app.run()

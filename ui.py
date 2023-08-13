@@ -1,4 +1,5 @@
 import pygame
+# pygame.init()
 
 def RenderText(screen, message, font, text_color, x, y):
     img = font.render(message, True, text_color)
@@ -25,7 +26,7 @@ class Button:
         self.InitializeFont()
         
     def InitializeFont(self):
-        self.font = pygame.font.SysFont("consolas", self.font_size)
+        self.font = pygame.font.Font('freesansbold.ttf', 15)
         
     
     def Update(self):

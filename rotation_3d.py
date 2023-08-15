@@ -17,11 +17,11 @@ def rotation_matrix_y(phi):
 # Step 2: Define Perspective Projection Matrix
 # fov = np.radians(150)  # Field of view in radians, Adjust this value to control the zoom level
 
-distance = 1000.0  # Distance from the center point
+distance = 10.0  # Distance from the center point
 view_width = 1920.0  # Width of the viewport (screen)
 
 fov = 2 * np.arctan(view_width / (2 * distance))
-fov = 1
+# fov = 1
 
 aspect_ratio = 1920/1080   # Aspect ratio of viewport
 near = 0.1            # Near clipping plane
@@ -66,21 +66,30 @@ projected_points_x_y[:, 1] = (projected_points_x_y[:, 1] + 1) * (1080 / 2)
 
 
 
-def get_projected_points(points_3d, phi):
-    rotated_points = np.dot(points_3d, rotation_matrix_y(phi).T) 
-    homogeneous_rotated_points = np.hstack((rotated_points, np.ones((rotated_points.shape[0], 1))))
-    projected_points = np.dot(homogeneous_rotated_points, projection_matrix.T)
-    # print("projected_points : \n", projected_points)
-    
-    projected_points[:, 3][projected_points[:, 3] == 0] = 1e-6
-    
-    projected_points = projected_points[:, :3] / projected_points[:, 3:]
-    projected_points_x_y = projected_points[:, :2]
-    # # Adjust (x, y) coordinates to screen dimensions
-    projected_points_x_y[:, 0] = (projected_points_x_y[:, 0] + 1) * (1920 / 2)
-    projected_points_x_y[:, 1] = (projected_points_x_y[:, 1] + 1) * (1080 / 2)
-    
-    return projected_points_x_y
+# def get_projected_points(points_3d, phi, distance):
+#     distance = distance
+#     view_width = 1920.0 
+#     fov = 2 * np.arctan(view_width / (2 * distance))
+#     aspect_ratio = 1920/1080   # Aspect ratio of viewport
+#     near = 0.1            # Near clipping plane
+#     far = 100.0           # Far clipping plane
+#     projection_matrix = np.array([
+#         [1 / (aspect_ratio * np.tan(fov / 2)), 0, 0, 0],
+#         [0, 1 / np.tan(fov / 2), 0, 0],
+#         [0, 0, -(far + near) / (far - near), -2 * far * near / (far - near)],
+#         [0, 0, -1, 0]
+#     ])
+#     rotated_points = np.dot(points_3d, rotation_matrix_y(phi).T) 
+#     homogeneous_rotated_points = np.hstack((rotated_points, np.ones((rotated_points.shape[0], 1))))
+#     projected_points = np.dot(homogeneous_rotated_points, projection_matrix)
+#     # print("projected_points : \n", projected_points)
+#     projected_points[:, 3][projected_points[:, 3] == 0] = 1e-6
+#     projected_points = projected_points[:, :3] / projected_points[:, 3:]
+#     projected_points_x_y = projected_points[:, :2]
+#     # # Adjust (x, y) coordinates to screen dimensions
+#     projected_points_x_y[:, 0] = (projected_points_x_y[:, 0] + 1) * (1920 / 2)
+#     projected_points_x_y[:, 1] = (projected_points_x_y[:, 1] + 1) * (1080 / 2)
+#     return projected_points_x_y
 
 
 def custom_projection_matrix(distance, rotated_points):

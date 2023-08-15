@@ -95,9 +95,9 @@ class RenderEngine:
             self.rotate_y = not self.rotate_y
             
         if keys[pygame.K_d]:
-            self.distance += 10
+            self.distance += 22
         if keys[pygame.K_c]:
-            self.distance -= 10
+            self.distance -= 22
         if keys[pygame.K_s]:
             self.scale += 10
         if keys[pygame.K_x]:
@@ -173,15 +173,17 @@ class RenderEngine:
     def render_ui(self):
         panel.render(self.screen)
         if add_body_button.Draw(self.screen):
+            mass = np.random.randint(5, 20) * 6e15
             self.bodies = np.append(self.bodies, 
                       Body(
                           position=np.random.randint(-500, 500, 3),
-                          mass= 6e15 * 20,
+                          mass=mass,
                           color= np.random.randint(0, 256, 3),
-                          radius=20
+                          radius= mass / 6e15
                       ))
             idx = self.bodies.size - 1
             self.bodies[idx].add_velocity(np.random.randint(-500, 500, 3))
+            self.bodies = self.bodies[::-1]
             print(self.bodies.size)
 
             

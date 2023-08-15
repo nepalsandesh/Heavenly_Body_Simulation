@@ -78,3 +78,22 @@ class Panel:
         else:
             self.color = (55,55,155)
             return False        
+        
+        
+class TextUI:
+    """A class for rendering text UI"""
+    def __init__(self, text, position, fontColor, anchor="center"):
+        self.text = text
+        self.position = position
+        self.fontColor = fontColor
+        self.anchor = anchor
+        self.fontSize = 15
+        self.font = 'freesansbold.ttf'
+        
+    def render(self, screen):
+        """method for rendering the text"""
+        font = pygame.font.Font(self.font, self.fontSize)
+        text = font.render(self.text, True, self.fontColor)
+        # textRect = text.get_rect()
+        # setattr(textRect, self.anchor, self.position)
+        screen.blit(text, self.position)

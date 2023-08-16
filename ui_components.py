@@ -16,6 +16,7 @@ add_body_button = Button(
 distance_text_UI = TextUI("Distance: ", position=(x+20, y+20), fontColor=(255,255,255))
 scale_text_UI = TextUI("Scale: ", position=(x+20, y+50), fontColor=(255,255,255))
 rotate_text_UI = TextUI("Rotate: ", position=(x+20, y+80), fontColor=(255,255,255))
+fps_text_UI = TextUI("FPS: ", position=(x+20, y+ 150), fontColor=(255, 255, 255))
 rotate_x_radiobutton = RadioButton(x+130, y+80, 20, 20, "x")
 rotate_y_radiobutton = RadioButton(x+160, y+80, 20, 20, "y")
 rotate_z_radiobutton = RadioButton(x+190, y+80, 20, 20, "z")

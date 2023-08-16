@@ -186,6 +186,7 @@ class RenderEngine:
         distance_text_UI.render(self.screen, f"{self.distance}")
         scale_text_UI.render(self.screen, f"{self.scale}")
         rotate_text_UI.render(self.screen)
+        fps_text_UI.render(self.screen, f"{np.round(self.clock.get_fps(), 2)}")
         
         if rotate_x_radiobutton.render(self.screen):
             self.rotate_x = True
@@ -240,8 +241,6 @@ class RenderEngine:
             self.draw()
             self.render_ui()
             bodies[-1].position = np.zeros(3)
-            text = self.font.render("FPS: %f"%(self.clock.get_fps()), True, (255, 255, 255))
-            # self.screen.blit(text, (1920//2, 20))
             
             if self.display_logo:
                 self.screen.blit(self.logo, (1740, 1000))

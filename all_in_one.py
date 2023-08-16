@@ -64,7 +64,7 @@ class RenderEngine:
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.clock = pygame.time.Clock()
         self.FPS = 60
-        self.angle = 0.01
+        self.angle = 0.01 
         self.font = pygame.font.Font('freesansbold.ttf', 15)
         
         self.distance = 4400
@@ -81,7 +81,7 @@ class RenderEngine:
         
         self.display_logo = display_logo
         self.logo = pygame.image.load("VORTEX_LAB_logo.png")
-        self.logo = pygame.transform.rotozoom(self.logo, 0, 0.53)
+        self.logo = pygame.transform.rotozoom(self.logo, 0, 0.35)
         
         self.rotation_speed = 0.000
         self.bodies = bodies
@@ -219,8 +219,16 @@ class RenderEngine:
             idx = self.bodies.size - 1
             self.bodies[idx].add_velocity(np.random.randint(-500, 500, 3))
             self.bodies = self.bodies[::-1]
-            # print(self.bodies.size)
 
+        if distance_plus_button.is_double_clicked(self.screen):
+            self.distance += 22
+        if distance_minus_button.is_double_clicked(self.screen):
+            self.distance -= 22
+
+        if scale_plus_button.is_double_clicked(self.screen):
+            self.scale += 22
+        if scale_minus_button.is_double_clicked(self.screen):
+            self.scale -= 22
             
     
     def run(self):
@@ -236,7 +244,7 @@ class RenderEngine:
             # self.screen.blit(text, (1920//2, 20))
             
             if self.display_logo:
-                self.screen.blit(self.logo, (1680, 980))
+                self.screen.blit(self.logo, (1740, 1000))
             
             # image save
             if self.save_image:

@@ -141,6 +141,7 @@ class RadioButton:
         
         
     def render(self, screen):
+        "Renders and returns true if single clicked. Debounce interval is set."
         if self.active:
             color = self.active_color
         else:
@@ -157,3 +158,22 @@ class RadioButton:
                     self.active = not self.active
         return self.active
         
+    def is_double_clicked(self, screen):
+        "Renders and returns true while clicked. Debounce interval is not set"
+        if self.active:
+            color = self.active_color
+        else:
+            color = self.initial_color
+        action = False
+        pygame.draw.rect(screen, color, self.rect)
+        RenderText(screen, self.text, self.font, self.text_color, self.rect.x + self.w//2, self.rect.y + self.h//2)
+        m_pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(m_pos):
+            self.color = self.hover_color
+            if pygame.mouse.get_pressed()[0]:
+                action = True 
+                self.active = True  
+            else:
+                self.color = self.initial_color
+                self.active = False
+        return action

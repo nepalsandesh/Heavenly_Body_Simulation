@@ -25,6 +25,9 @@ class Button:
         self.text_color = (0,0,0)
         self.InitializeFont()
         
+        self.last_button_pressed_time = 0
+        self.debounce_interval = 500
+        
     def InitializeFont(self):
         self.font = pygame.font.Font('freesansbold.ttf', 15)
         
@@ -35,8 +38,11 @@ class Button:
         if self.rect.collidepoint(m_pos):
             self.color = self.hover_color
             if pygame.mouse.get_pressed()[0]:
-                self.color = (175,25, 175)
-                action = True   
+                current_time = pygame.time.get_ticks()
+                if current_time - self.last_button_pressed_time > self.debounce_interval:
+                    self.last_button_pressed_time = current_time
+                    self.color = (175,25, 175)
+                    action = True   
         else:
             self.color = self.initial_color
         return action
@@ -87,13 +93,67 @@ class TextUI:
         self.position = position
         self.fontColor = fontColor
         self.anchor = anchor
-        self.fontSize = 15
+        self.fontSize = 20
         self.font = 'freesansbold.ttf'
         
-    def render(self, screen):
+    def render(self, screen, additional_text=""):
         """method for rendering the text"""
         font = pygame.font.Font(self.font, self.fontSize)
-        text = font.render(self.text, True, self.fontColor)
+        text = font.render(self.text+additional_text, True, self.fontColor)
         # textRect = text.get_rect()
         # setattr(textRect, self.anchor, self.position)
         screen.blit(text, self.position)
+        
+        
+
+class RadioButton:
+    def __init__(self, x, y, w, h, text):
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+        self.rect = pygame.Rect(x, y, w, h)
+        self.text = text
+        self.fontsize  = 20
+        self.font = pygame.font.Font('freesansbold.ttf', 15)
+        self.clicked = False
+        self.active = False
+        self.last_button_pressed_time = 0
+        self.debounce_interval = 200
+        
+        self.color = (200, 200, 200)
+        self.hover_color = (150, 150, 150)
+        self.initial_color = self.color
+        self.active_color = (100, 100, 255)
+        self.text_color = (0,0,0)
+        
+    
+    def update(self):
+        m_pos = pygame.mouse.get_pos()
+        if self.rect.colliderect(m_pos):
+            self.color = self.hover_color
+            if pygame.mouse.get_pressed()[0]:
+                current_time = pygame.time.get_ticks()
+                if current_time - self.last_button_pressed_time > self.debounce_interval:
+                    self.last_button_pressed_time = current_time
+                    self.clicked = not self.clicked
+                
+        
+        
+    def render(self, screen):
+        if self.active:
+            color = self.active_color
+        else:
+            color = self.initial_color
+        pygame.draw.rect(screen, color, self.rect)
+        RenderText(screen, self.text, self.font, self.text_color, self.rect.x + self.w//2, self.rect.y + self.h//2)
+        m_pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(m_pos):
+            self.color = self.hover_color
+            if pygame.mouse.get_pressed()[0]:
+                current_time = pygame.time.get_ticks()
+                if current_time - self.last_button_pressed_time > self.debounce_interval:
+                    self.last_button_pressed_time = current_time
+                    self.active = not self.active
+        return self.active
+        

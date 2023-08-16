@@ -13,6 +13,20 @@ def rotation_matrix_y(phi):
         [0, 1, 0],
         [-np.sin(phi), 0, np.cos(phi)]
     ])
+    
+def rotation_matrix_x(phi):
+    return np.array([
+        [1, 0, 0],
+        [0, np.cos(phi), -np.sin(phi)],
+        [0, np.sin(phi), np.cos(phi)]
+    ], dtype=np.float32)
+    
+def rotation_matrix_z(phi):
+    return np.array([
+        [np.cos(phi), -np.sin(phi), 0],
+        [np.sin(phi), np.cos(phi), 0],
+        [0, 0, 1]
+    ], dtype=np.float32)
 
 # Step 2: Define Perspective Projection Matrix
 # fov = np.radians(150)  # Field of view in radians, Adjust this value to control the zoom level
@@ -100,8 +114,14 @@ def custom_projection_matrix(distance, rotated_points):
     return projected_points
     
     
-def get_projected_points(points_3d, phi, distance=500, scale=1000):
-    rotated_points = np.dot(points_3d, rotation_matrix_y(phi).T)
+def get_projected_points(points_3d, phi, distance=500, scale=1000, rotate_x=False, rotate_y=False, rotate_z=False):
+    rotated_points = points_3d
+    if rotate_y == True:
+        rotated_points = np.dot(rotated_points, rotation_matrix_y(phi).T)
+    if rotate_x == True:
+        rotated_points = np.dot(rotated_points, rotation_matrix_x(phi).T)
+    if rotate_z == True:
+        rotated_points = np.dot(rotated_points, rotation_matrix_z(phi).T)
     projected_points = custom_projection_matrix(distance, rotated_points)
     x = projected_points[:, 0] * scale + (1920/2)
     y = projected_points[:, 1] * scale + (1080/2)

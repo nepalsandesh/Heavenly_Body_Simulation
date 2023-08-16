@@ -1,12 +1,22 @@
 import pygame
-from ui import RenderText, Button, Panel
+from ui import RenderText, Button, Panel, TextUI, RadioButton
 
 panel = Panel((20, 20), 300, 400, (55, 55, 100), 80)
 
 # button to append body in bodies 
 add_body_button = Button(
-    x=panel.position[0] + 20,
-    y=panel.position[1] + 20,
+    x=panel.position[0] + 100,
+    y=panel.position[1] + 350,
     w=100, h=30, text="Add Body",
    
 )
+
+(x,y) = panel.position
+
+distance_text_UI = TextUI("Distance: ", position=(x+20, y+20), fontColor=(255,255,255))
+scale_text_UI = TextUI("Scale: ", position=(x+20, y+50), fontColor=(255,255,255))
+rotate_text_UI = TextUI("Rotate: ", position=(x+20, y+80), fontColor=(255,255,255))
+rotate_x_radiobutton = RadioButton(x+130, y+80, 20, 20, "x")
+rotate_y_radiobutton = RadioButton(x+160, y+80, 20, 20, "y")
+rotate_z_radiobutton = RadioButton(x+190, y+80, 20, 20, "z")
+display_orbit_radiobutton = RadioButton(x+130, y+110, 60, 20, "Orbit")

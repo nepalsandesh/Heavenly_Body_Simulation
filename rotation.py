@@ -8,7 +8,7 @@ import numpy as np
 
 
 def rotate_x(positions, theta):
-    print(positions.shape)
+    # print(positions.shape)
     positions = positions.reshape((-1,1))
     # print("position.shape \,", positions.shape)
     rotation_x = np.array([

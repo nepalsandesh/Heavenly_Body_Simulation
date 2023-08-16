@@ -3,7 +3,7 @@ import pygame
 pygame.init()
 from physics_engine import PhysicsEngine
 from rotation_3d import get_projected_points
-from ui_components import panel, add_body_button
+from ui_components import *
 
 def rotate_y(theta):
     return np.array([
@@ -64,13 +64,17 @@ class RenderEngine:
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.clock = pygame.time.Clock()
         self.FPS = 60
-        self.angle = 0.00
+        self.angle = 0.01
         self.font = pygame.font.Font('freesansbold.ttf', 15)
         
         self.distance = 4400
         self.scale = 2200
         
+        self.rotate_x = False
         self.rotate_y = False
+        self.rotate_z = False
+        
+        self.render_orbit = False       
         
         self.save_image = save_image
         self.frame_count = 0
@@ -90,9 +94,6 @@ class RenderEngine:
         if keys[pygame.K_ESCAPE]:
             pygame.quit()
             exit()
-            
-        if keys[pygame.K_y]:
-            self.rotate_y = not self.rotate_y
             
         if keys[pygame.K_d]:
             self.distance += 22
@@ -128,18 +129,28 @@ class RenderEngine:
     def rotate(self, angle):
         """Rotation Function"""
         bodies_position = np.array([body.position for body in self.bodies])
-        # print("bodies_position :  \n", bodies_position)
-        projected_points = get_projected_points(bodies_position, self.angle, self.distance, self.scale)
+        # projected_points = get_projected_points(bodies_position, self.angle, self.distance, self.scale, rotate_y=True)
+        projected_points = get_projected_points(
+            points_3d=bodies_position,
+            phi=angle,
+            rotate_x=self.rotate_x,
+            rotate_y=self.rotate_y,
+            rotate_z=self.rotate_z,
+            distance=self.distance,
+            scale=self.scale            
+        )
+        
         
         for i, body in enumerate(self.bodies):
             point = projected_points[i]
-            # print(point)
             if (point[0] >= 0 and point[0] <= 1920) and (point[1] >= 0 and point[1] <= 1080):
                 pygame.draw.circle(self.screen, body.color, point, body.radius)
-            
-                orbit_points = body.position_history
-                projected_orbit_points = get_projected_points(orbit_points, self.angle, self.distance,  self.scale)
-                pygame.draw.lines(self.screen, body.color, False, projected_orbit_points, 1)
+
+                if self.render_orbit:
+                    orbit_points = body.position_history
+                    projected_orbit_points = get_projected_points(orbit_points, self.angle, self.distance,  self.scale,
+                                                                  self.rotate_x, self.rotate_y,  self.rotate_z)
+                    pygame.draw.lines(self.screen, body.color, False, projected_orbit_points, 1)
 
             
         self.angle += self.rotation_speed
@@ -155,23 +166,47 @@ class RenderEngine:
             
 
     def draw(self):
-        if not self.rotate_y:
-            for i, body in enumerate(self.bodies):
-                window_coordinate = get_window_coordinates(body.position)
+        # if not self.rotate_y:
+        #     for i, body in enumerate(self.bodies):
+        #         window_coordinate = get_window_coordinates(body.position)
                 
-                pygame.draw.circle(
-                    self.screen,
-                    body.color,
-                    window_coordinate[:2],
-                    body.radius
-                )
+        #         pygame.draw.circle(
+        #             self.screen,
+        #             body.color,
+        #             window_coordinate[:2],
+        #             body.radius
+        #         )
         
-        if self.rotate_y:
-            self.rotate(self.angle)
+        
+        self.rotate(self.angle)
             
             
     def render_ui(self):
         panel.render(self.screen)
+        distance_text_UI.render(self.screen, f"{self.distance}")
+        scale_text_UI.render(self.screen, f"{self.scale}")
+        rotate_text_UI.render(self.screen)
+        
+        if rotate_x_radiobutton.render(self.screen):
+            self.rotate_x = True
+        else:
+            self.rotate_x = False
+
+        if rotate_y_radiobutton.render(self.screen):
+            self.rotate_y = True
+        else:
+            self.rotate_y = False
+            
+        if rotate_z_radiobutton.render(self.screen):
+            self.rotate_z = True
+        else:
+            self.rotate_z = False
+            
+        if display_orbit_radiobutton.render(self.screen):
+            self.render_orbit = True
+        else:
+            self.render_orbit = False
+        
         if add_body_button.Draw(self.screen):
             mass = np.random.randint(5, 20) * 6e15
             self.bodies = np.append(self.bodies, 
@@ -184,7 +219,7 @@ class RenderEngine:
             idx = self.bodies.size - 1
             self.bodies[idx].add_velocity(np.random.randint(-500, 500, 3))
             self.bodies = self.bodies[::-1]
-            print(self.bodies.size)
+            # print(self.bodies.size)
 
             
     
@@ -209,7 +244,7 @@ class RenderEngine:
                 pygame.image.save(self.screen, filename)
                 self.frame_count += 1  
                 
-            print("Distance: %g, Scale: %g, FPS: %g, Rotation_speed: %g"%(self.distance, self.scale, self.clock.get_fps(), self.rotation_speed))
+            # print("Distance: %g, Scale: %g, FPS: %g, Rotation_speed: %g"%(self.distance, self.scale, self.clock.get_fps(), self.rotation_speed))
         
             
             pygame.display.flip()

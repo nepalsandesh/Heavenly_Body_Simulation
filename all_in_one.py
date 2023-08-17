@@ -165,19 +165,7 @@ class RenderEngine:
             body.append_position(body.position)
             
 
-    def draw(self):
-        # if not self.rotate_y:
-        #     for i, body in enumerate(self.bodies):
-        #         window_coordinate = get_window_coordinates(body.position)
-                
-        #         pygame.draw.circle(
-        #             self.screen,
-        #             body.color,
-        #             window_coordinate[:2],
-        #             body.radius
-        #         )
-        
-        
+    def draw(self):       
         self.rotate(self.angle)
             
             
@@ -230,6 +218,13 @@ class RenderEngine:
             self.scale += 22
         if scale_minus_button.is_double_clicked(self.screen):
             self.scale -= 22
+            
+        display_orbit_text_UI.render(self.screen)
+        rotation_speed_text_UI.render(self.screen)
+        if rotation_speed_plus_button.is_double_clicked(self.screen):
+            self.rotation_speed += 0.0001
+        if rotation_speed_minus_button.is_double_clicked(self.screen):
+            self.rotation_speed -= 0.0001
             
     
     def run(self):

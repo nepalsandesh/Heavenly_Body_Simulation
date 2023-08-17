@@ -64,15 +64,14 @@ class RenderEngine:
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.clock = pygame.time.Clock()
         self.FPS = 60
-        self.angle = 0.01 
         self.font = pygame.font.Font('freesansbold.ttf', 15)
         
         self.distance = 4400
         self.scale = 2200
         
-        self.rotate_x = False
-        self.rotate_y = False
-        self.rotate_z = False
+        self.angle_x = 0
+        self.angle_y = 0
+        self.angle_z = 0
         
         self.render_orbit = False       
         
@@ -83,7 +82,7 @@ class RenderEngine:
         self.logo = pygame.image.load("VORTEX_LAB_logo.png")
         self.logo = pygame.transform.rotozoom(self.logo, 0, 0.35)
         
-        self.rotation_speed = 0.000
+        self.rotation_speed = 0.004
         self.bodies = bodies
         
     def check_events(self):
@@ -94,19 +93,7 @@ class RenderEngine:
         if keys[pygame.K_ESCAPE]:
             pygame.quit()
             exit()
-            
-        if keys[pygame.K_d]:
-            self.distance += 22
-        if keys[pygame.K_c]:
-            self.distance -= 22
-        if keys[pygame.K_s]:
-            self.scale += 10
-        if keys[pygame.K_x]:
-            self.scale -= 10
-        if keys[pygame.K_UP]:
-            self.rotation_speed += 0.005
-        if keys[pygame.K_DOWN]:
-            self.rotation_speed -= 0.005
+
         
     # def rotate(self, angle):
     #     bodies_position = np.array([body.position for body in bodies])
@@ -126,16 +113,15 @@ class RenderEngine:
     #         pygame.draw.lines(self.screen, body.color, False, rotated_orbit_points, 1)
     
     
-    def rotate(self, angle):
+    def rotate(self):
         """Rotation Function"""
         bodies_position = np.array([body.position for body in self.bodies])
         # projected_points = get_projected_points(bodies_position, self.angle, self.distance, self.scale, rotate_y=True)
         projected_points = get_projected_points(
             points_3d=bodies_position,
-            phi=angle,
-            rotate_x=self.rotate_x,
-            rotate_y=self.rotate_y,
-            rotate_z=self.rotate_z,
+            angle_x=self.angle_x,
+            angle_y=self.angle_y,
+            angle_z=self.angle_z,
             distance=self.distance,
             scale=self.scale            
         )
@@ -148,14 +134,25 @@ class RenderEngine:
 
                 if self.render_orbit:
                     orbit_points = body.position_history
-                    projected_orbit_points = get_projected_points(orbit_points, self.angle, self.distance,  self.scale,
-                                                                  self.rotate_x, self.rotate_y,  self.rotate_z)
+                    projected_orbit_points = get_projected_points(orbit_points, self.angle_x, self.angle_y, self.angle_z, self.distance,  self.scale)
                     pygame.draw.lines(self.screen, body.color, False, projected_orbit_points, 1)
 
-            
-        self.angle += self.rotation_speed
-        if angle >= 2* np.pi:
-            angle = 0
+
+        
+        
+        
+        if self.angle_x >= 2* np.pi:
+            self.angle_x = 0
+        if self.angle_y >= 2* np.pi:
+            self.angle_y = 0
+        if self.angle_z >= 2* np.pi:
+            self.angle_z = 0
+        if self.angle_x <= -2* np.pi:
+            self.angle_x = 0
+        if self.angle_y <= -2* np.pi:
+            self.angle_y = 0
+        if self.angle_z <= -2* np.pi:
+            self.angle_z = 0
     
     def update(self):
         net_force = engine.compute_force_vectors(bodies=self.bodies)
@@ -166,7 +163,7 @@ class RenderEngine:
             
 
     def draw(self):       
-        self.rotate(self.angle)
+        self.rotate()
             
             
     def render_ui(self):
@@ -177,19 +174,15 @@ class RenderEngine:
         fps_text_UI.render(self.screen, f"{np.round(self.clock.get_fps(), 2)}")
         
         if rotate_x_radiobutton.render(self.screen):
-            self.rotate_x = True
-        else:
-            self.rotate_x = False
+            self.angle_x += self.rotation_speed
 
         if rotate_y_radiobutton.render(self.screen):
-            self.rotate_y = True
-        else:
-            self.rotate_y = False
+            self.angle_y += self.rotation_speed
+
             
         if rotate_z_radiobutton.render(self.screen):
-            self.rotate_z = True
-        else:
-            self.rotate_z = False
+            self.angle_z += self.rotation_speed
+
             
         if display_orbit_radiobutton.render(self.screen):
             self.render_orbit = True
@@ -198,12 +191,14 @@ class RenderEngine:
         
         if add_body_button.Draw(self.screen):
             mass = np.random.randint(5, 20) * 6e15
+            # mass = np.random.randint(4, 400) * 6e15
             self.bodies = np.append(self.bodies, 
                       Body(
                           position=np.random.randint(-500, 500, 3),
                           mass=mass,
                           color= np.random.randint(0, 256, 3),
                           radius= mass / 6e15
+                        #   radius= 10
                       ))
             idx = self.bodies.size - 1
             self.bodies[idx].add_velocity(np.random.randint(-500, 500, 3))
@@ -247,6 +242,7 @@ class RenderEngine:
                 self.frame_count += 1  
                 
             # print("Distance: %g, Scale: %g, FPS: %g, Rotation_speed: %g"%(self.distance, self.scale, self.clock.get_fps(), self.rotation_speed))
+            print("angle_x: %g, angle_y:%g angle_z: %g, rotation_speed: %g"%(self.angle_x, self.angle_y, self.angle_z, self.rotation_speed))
         
             
             pygame.display.flip()
@@ -263,7 +259,7 @@ bodies = [Body(
 
 bodies.append(Body(
     position=np.zeros(3),
-    mass= 6e15 * 1000,
+    mass= 6e15 * 400,
     radius=40,
     color=np.array([255, 255, 255])
 ))

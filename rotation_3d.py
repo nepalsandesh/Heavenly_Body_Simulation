@@ -114,14 +114,28 @@ def custom_projection_matrix(distance, rotated_points):
     return projected_points
     
     
-def get_projected_points(points_3d, phi, distance=500, scale=1000, rotate_x=False, rotate_y=False, rotate_z=False):
+# def get_projected_points(points_3d, phi, distance=500, scale=1000, rotate_x=False, rotate_y=False, rotate_z=False):
+#     rotated_points = points_3d
+#     if rotate_y == True:
+#         rotated_points = np.dot(rotated_points, rotation_matrix_y(phi).T)
+#     if rotate_x == True:
+#         rotated_points = np.dot(rotated_points, rotation_matrix_x(phi).T)
+#     if rotate_z == True:
+#         rotated_points = np.dot(rotated_points, rotation_matrix_z(phi).T)
+#     projected_points = custom_projection_matrix(distance, rotated_points)
+#     x = projected_points[:, 0] * scale + (1920/2)
+#     y = projected_points[:, 1] * scale + (1080/2)
+#     points = np.array([x, y]).T
+#     # print("points : \n", points)
+#     return points
+
+
+
+def get_projected_points(points_3d, angle_x, angle_y, angle_z, distance=500, scale=1000):
     rotated_points = points_3d
-    if rotate_y == True:
-        rotated_points = np.dot(rotated_points, rotation_matrix_y(phi).T)
-    if rotate_x == True:
-        rotated_points = np.dot(rotated_points, rotation_matrix_x(phi).T)
-    if rotate_z == True:
-        rotated_points = np.dot(rotated_points, rotation_matrix_z(phi).T)
+    rotated_points = np.dot(rotated_points, rotation_matrix_x(angle_x).T)
+    rotated_points = np.dot(rotated_points, rotation_matrix_y(angle_y).T)
+    rotated_points = np.dot(rotated_points, rotation_matrix_z(angle_z).T)
     projected_points = custom_projection_matrix(distance, rotated_points)
     x = projected_points[:, 0] * scale + (1920/2)
     y = projected_points[:, 1] * scale + (1080/2)

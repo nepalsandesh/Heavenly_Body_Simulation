@@ -135,7 +135,7 @@ class RenderEngine:
                 if self.render_orbit:
                     orbit_points = body.position_history
                     projected_orbit_points = get_projected_points(orbit_points, self.angle_x, self.angle_y, self.angle_z, self.distance,  self.scale)
-                    pygame.draw.lines(self.screen, body.color, False, projected_orbit_points, 1)
+                    pygame.draw.lines(self.screen, body.color, False, projected_orbit_points, 2)
 
 
         

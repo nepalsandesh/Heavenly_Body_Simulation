@@ -141,7 +141,7 @@ class RadioButton:
         
         
     def render(self, screen):
-        "Renders and returns true if single clicked. Debounce interval is set."
+        "Renders and returns true until next click. Debounce interval is set."
         if self.active:
             color = self.active_color
         else:

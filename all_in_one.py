@@ -221,6 +221,11 @@ class RenderEngine:
         if rotation_speed_minus_button.is_double_clicked(self.screen):
             self.rotation_speed -= 0.0001
             
+        if save_images_button.render(self.screen):
+            self.save_image = True
+        else:
+            self.save_image = False
+            
     
     def run(self):
         while True:
@@ -239,6 +244,7 @@ class RenderEngine:
             if self.save_image:
                 filename = "captures/observe/%08d.png" % (self.frame_count)
                 pygame.image.save(self.screen, filename)
+                print(f"Frame : {self.frame_count}")
                 self.frame_count += 1  
                 
             # print("Distance: %g, Scale: %g, FPS: %g, Rotation_speed: %g"%(self.distance, self.scale, self.clock.get_fps(), self.rotation_speed))
